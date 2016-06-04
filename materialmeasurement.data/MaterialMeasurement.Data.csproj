@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3BDCB708-3B2F-488D-8076-FDBBC3676A88}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MaterialMeasurement.Data</RootNamespace>
+    <AssemblyName>MaterialMeasurement.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="Composition.cs">
+      <DependentUpon>MaterialMeasurementEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccessLayer\Abstract\IBaseService.cs" />
+    <Compile Include="DataAccessLayer\Abstract\ICompositionService.cs" />
+    <Compile Include="DataAccessLayer\Abstract\IImportedInventoryService.cs" />
+    <Compile Include="DataAccessLayer\Abstract\IMaterialService.cs" />
+    <Compile Include="DataAccessLayer\Abstract\IMeasurementDetailRecordService.cs" />
+    <Compile Include="DataAccessLayer\Abstract\IMeasurementRecordService.cs" />
+    <Compile Include="DataAccessLayer\Abstract\IMonthReportService.cs" />
+    <Compile Include="DataAccessLayer\Abstract\IUserService.cs" />
+    <Compile Include="DataAccessLayer\Concrete\CompositionService.cs" />
+    <Compile Include="DataAccessLayer\Concrete\ImportednventoryService.cs" />
+    <Compile Include="DataAccessLayer\Concrete\MaterialService.cs" />
+    <Compile Include="DataAccessLayer\Concrete\MeasurementDetailRecordService.cs" />
+    <Compile Include="DataAccessLayer\Concrete\MeasurementRecordService.cs" />
+    <Compile Include="DataAccessLayer\Concrete\MonthReportService.cs" />
+    <Compile Include="DataAccessLayer\Concrete\UserService.cs" />
+    <Compile Include="ImportedInventory.cs">
+      <DependentUpon>MaterialMeasurementEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Material.cs">
+      <DependentUpon>MaterialMeasurementEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MaterialMeasurementEntities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MaterialMeasurementEntities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MaterialMeasurementEntities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MaterialMeasurementEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MaterialMeasurementEntities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MaterialMeasurementEntities.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="MeasurementDetailRecord.cs">
+      <DependentUpon>MaterialMeasurementEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MeasurementRecord.cs">
+      <DependentUpon>MaterialMeasurementEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MonthReport.cs">
+      <DependentUpon>MaterialMeasurementEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Role.cs">
+      <DependentUpon>MaterialMeasurementEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysdiagram.cs">
+      <DependentUpon>MaterialMeasurementEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="User.cs">
+      <DependentUpon>MaterialMeasurementEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Utility\Enum.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="MaterialMeasurementEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>MaterialMeasurementEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="MaterialMeasurementEntities.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MaterialMeasurementEntities.edmx</DependentUpon>
+      <LastGenOutput>MaterialMeasurementEntities.Context.cs</LastGenOutput>
+    </None>
+    <None Include="MaterialMeasurementEntities.edmx.diagram">
+      <DependentUpon>MaterialMeasurementEntities.edmx</DependentUpon>
+    </None>
+    <None Include="MaterialMeasurementEntities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MaterialMeasurementEntities.edmx</DependentUpon>
+      <LastGenOutput>MaterialMeasurementEntities.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,697 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Composition">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ResultMaterialID" Type="bigint" Nullable="false" />
+          <Property Name="ComponentMaterialID" Type="bigint" Nullable="false" />
+          <Property Name="Weight" Type="float" Nullable="false" />
+          <Property Name="WeightUnit" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="ImportedInventory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MaterialID" Type="bigint" Nullable="false" />
+          <Property Name="ParcelCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ImportDate" Type="datetime" Nullable="false" />
+          <Property Name="Quantity" Type="float" Nullable="false" />
+          <Property Name="WeightUnit" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="OriginalQuantity" Type="float" />
+        </EntityType>
+        <EntityType Name="Material">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="TypeID" Type="int" Nullable="false" />
+          <Property Name="Revision" Type="int" Nullable="false" />
+          <Property Name="PatId" Type="bigint" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MeasurementDetailRecord">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MeasurementRecordID" Type="bigint" Nullable="false" />
+          <Property Name="RawMaterialID" Type="bigint" Nullable="false" />
+          <Property Name="Weight" Type="float" Nullable="false" />
+          <Property Name="WeightUnit" Type="nchar" MaxLength="10" />
+          <Property Name="ParcelCode" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="MeasurementRecord">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RecordDate" Type="datetime" Nullable="false" />
+          <Property Name="ResultMaterialID" Type="bigint" Nullable="false" />
+          <Property Name="Weight" Type="float" Nullable="false" />
+          <Property Name="WeightUnit" Type="nchar" MaxLength="10" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="ParcelCode" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="MonthReport">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MaterialId" Type="bigint" Nullable="false" />
+          <Property Name="MaterialCode" Type="varchar" MaxLength="20" />
+          <Property Name="MaterialName" Type="nvarchar(max)" />
+          <Property Name="RemainQuantity" Type="float" Nullable="false" />
+          <Property Name="ImportQuantity" Type="float" Nullable="false" />
+          <Property Name="ExportQuantity" Type="float" Nullable="false" />
+          <Property Name="WeightUnit" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="ReportDate" Type="date" Nullable="false" />
+          <Property Name="ParcelCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Username" />
+          </Key>
+          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Role" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserInRole">
+          <Key>
+            <PropertyRef Name="Username" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="RoleId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Composition_Material">
+          <End Role="Material" Type="Self.Material" Multiplicity="1" />
+          <End Role="Composition" Type="Self.Composition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Composition">
+              <PropertyRef Name="ResultMaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Composition_Material1">
+          <End Role="Material" Type="Self.Material" Multiplicity="1" />
+          <End Role="Composition" Type="Self.Composition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Composition">
+              <PropertyRef Name="ComponentMaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ImportedInventory_Material">
+          <End Role="Material" Type="Self.Material" Multiplicity="1" />
+          <End Role="ImportedInventory" Type="Self.ImportedInventory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ImportedInventory">
+              <PropertyRef Name="MaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Material_Material">
+          <End Role="Material" Type="Self.Material" Multiplicity="0..1" />
+          <End Role="Material1" Type="Self.Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Material1">
+              <PropertyRef Name="PatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MeasurementDetailRecord_Material">
+          <End Role="Material" Type="Self.Material" Multiplicity="1" />
+          <End Role="MeasurementDetailRecord" Type="Self.MeasurementDetailRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MeasurementDetailRecord">
+              <PropertyRef Name="RawMaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MeasurementDetailRecord_MeasurementRecord">
+          <End Role="MeasurementRecord" Type="Self.MeasurementRecord" Multiplicity="1" />
+          <End Role="MeasurementDetailRecord" Type="Self.MeasurementDetailRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MeasurementRecord">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MeasurementDetailRecord">
+              <PropertyRef Name="MeasurementRecordID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MeasurementRecord_Material">
+          <End Role="Material" Type="Self.Material" Multiplicity="1" />
+          <End Role="MeasurementRecord" Type="Self.MeasurementRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MeasurementRecord">
+              <PropertyRef Name="ResultMaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthReport_Material">
+          <End Role="Material" Type="Self.Material" Multiplicity="1" />
+          <End Role="MonthReport" Type="Self.MonthReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MonthReport">
+              <PropertyRef Name="MaterialId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInRole_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="UserInRole" Type="Self.UserInRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserInRole">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInRole_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserInRole" Type="Self.UserInRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Username" />
+            </Principal>
+            <Dependent Role="UserInRole">
+              <PropertyRef Name="Username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="Composition" EntityType="Self.Composition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ImportedInventory" EntityType="Self.ImportedInventory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Material" EntityType="Self.Material" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MeasurementDetailRecord" EntityType="Self.MeasurementDetailRecord" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MeasurementRecord" EntityType="Self.MeasurementRecord" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MonthReport" EntityType="Self.MonthReport" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserInRole" EntityType="Self.UserInRole" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Composition_Material" Association="Self.FK_Composition_Material">
+            <End Role="Material" EntitySet="Material" />
+            <End Role="Composition" EntitySet="Composition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Composition_Material1" Association="Self.FK_Composition_Material1">
+            <End Role="Material" EntitySet="Material" />
+            <End Role="Composition" EntitySet="Composition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ImportedInventory_Material" Association="Self.FK_ImportedInventory_Material">
+            <End Role="Material" EntitySet="Material" />
+            <End Role="ImportedInventory" EntitySet="ImportedInventory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Material_Material" Association="Self.FK_Material_Material">
+            <End Role="Material" EntitySet="Material" />
+            <End Role="Material1" EntitySet="Material" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MeasurementDetailRecord_Material" Association="Self.FK_MeasurementDetailRecord_Material">
+            <End Role="Material" EntitySet="Material" />
+            <End Role="MeasurementDetailRecord" EntitySet="MeasurementDetailRecord" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MeasurementDetailRecord_MeasurementRecord" Association="Self.FK_MeasurementDetailRecord_MeasurementRecord">
+            <End Role="MeasurementRecord" EntitySet="MeasurementRecord" />
+            <End Role="MeasurementDetailRecord" EntitySet="MeasurementDetailRecord" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MeasurementRecord_Material" Association="Self.FK_MeasurementRecord_Material">
+            <End Role="Material" EntitySet="Material" />
+            <End Role="MeasurementRecord" EntitySet="MeasurementRecord" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthReport_Material" Association="Self.FK_MonthReport_Material">
+            <End Role="Material" EntitySet="Material" />
+            <End Role="MonthReport" EntitySet="MonthReport" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInRole_Role" Association="Self.FK_UserInRole_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="UserInRole" EntitySet="UserInRole" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInRole_User" Association="Self.FK_UserInRole_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserInRole" EntitySet="UserInRole" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="MaterialMeasurementEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ImportedInventories" EntityType="Model.ImportedInventory" />
+          <EntitySet Name="Materials" EntityType="Model.Material" />
+          <EntitySet Name="MeasurementDetailRecords" EntityType="Model.MeasurementDetailRecord" />
+          <EntitySet Name="MeasurementRecords" EntityType="Model.MeasurementRecord" />
+          <EntitySet Name="Roles" EntityType="Model.Role" />
+          <EntitySet Name="sysdiagrams" EntityType="Model.sysdiagram" />
+          <EntitySet Name="Users" EntityType="Model.User" />
+          <AssociationSet Name="FK_ImportedInventory_Material" Association="Model.FK_ImportedInventory_Material">
+            <End Role="Material" EntitySet="Materials" />
+            <End Role="ImportedInventory" EntitySet="ImportedInventories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Material_Material" Association="Model.FK_Material_Material">
+            <End Role="Material" EntitySet="Materials" />
+            <End Role="Material1" EntitySet="Materials" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MeasurementDetailRecord_Material" Association="Model.FK_MeasurementDetailRecord_Material">
+            <End Role="Material" EntitySet="Materials" />
+            <End Role="MeasurementDetailRecord" EntitySet="MeasurementDetailRecords" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MeasurementRecord_Material" Association="Model.FK_MeasurementRecord_Material">
+            <End Role="Material" EntitySet="Materials" />
+            <End Role="MeasurementRecord" EntitySet="MeasurementRecords" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MeasurementDetailRecord_MeasurementRecord" Association="Model.FK_MeasurementDetailRecord_MeasurementRecord">
+            <End Role="MeasurementRecord" EntitySet="MeasurementRecords" />
+            <End Role="MeasurementDetailRecord" EntitySet="MeasurementDetailRecords" />
+          </AssociationSet>
+          <AssociationSet Name="UserInRole" Association="Model.UserInRole">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <EntitySet Name="Compositions" EntityType="Model.Composition" />
+          <AssociationSet Name="FK_Composition_Material" Association="Model.FK_Composition_Material">
+            <End Role="Material" EntitySet="Materials" />
+            <End Role="Composition" EntitySet="Compositions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Composition_Material1" Association="Model.FK_Composition_Material1">
+            <End Role="Material" EntitySet="Materials" />
+            <End Role="Composition" EntitySet="Compositions" />
+          </AssociationSet>
+          <EntitySet Name="MonthReports" EntityType="Model.MonthReport" />
+          <AssociationSet Name="FK_MonthReport_Material" Association="Model.FK_MonthReport_Material">
+            <End Role="Material" EntitySet="Materials" />
+            <End Role="MonthReport" EntitySet="MonthReports" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="ImportedInventory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaterialID" Type="Int64" Nullable="false" />
+          <Property Name="ParcelCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ImportDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Quantity" Type="Double" Nullable="false" />
+          <Property Name="WeightUnit" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="OriginalQuantity" Type="Double" />
+          <NavigationProperty Name="Material" Relationship="Model.FK_ImportedInventory_Material" FromRole="ImportedInventory" ToRole="Material" />
+        </EntityType>
+        <EntityType Name="Material">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TypeID" Type="Int32" Nullable="false" />
+          <Property Name="Revision" Type="Int32" Nullable="false" />
+          <Property Name="PatId" Type="Int64" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ImportedInventories" Relationship="Model.FK_ImportedInventory_Material" FromRole="Material" ToRole="ImportedInventory" />
+          <NavigationProperty Name="Material1" Relationship="Model.FK_Material_Material" FromRole="Material" ToRole="Material1" />
+          <NavigationProperty Name="Material2" Relationship="Model.FK_Material_Material" FromRole="Material1" ToRole="Material" />
+          <NavigationProperty Name="MeasurementDetailRecords" Relationship="Model.FK_MeasurementDetailRecord_Material" FromRole="Material" ToRole="MeasurementDetailRecord" />
+          <NavigationProperty Name="MeasurementRecords" Relationship="Model.FK_MeasurementRecord_Material" FromRole="Material" ToRole="MeasurementRecord" />
+          <NavigationProperty Name="Compositions" Relationship="Model.FK_Composition_Material" FromRole="Material" ToRole="Composition" />
+          <NavigationProperty Name="Compositions1" Relationship="Model.FK_Composition_Material1" FromRole="Material" ToRole="Composition" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="MonthReports" Relationship="Model.FK_MonthReport_Material" FromRole="Material" ToRole="MonthReport" />
+        </EntityType>
+        <EntityType Name="MeasurementDetailRecord">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MeasurementRecordID" Type="Int64" Nullable="false" />
+          <Property Name="RawMaterialID" Type="Int64" Nullable="false" />
+          <Property Name="Weight" Type="Double" Nullable="false" />
+          <Property Name="WeightUnit" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Material" Relationship="Model.FK_MeasurementDetailRecord_Material" FromRole="MeasurementDetailRecord" ToRole="Material" />
+          <NavigationProperty Name="MeasurementRecord" Relationship="Model.FK_MeasurementDetailRecord_MeasurementRecord" FromRole="MeasurementDetailRecord" ToRole="MeasurementRecord" />
+          <Property Name="ParcelCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="MeasurementRecord">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RecordDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ResultMaterialID" Type="Int64" Nullable="false" />
+          <Property Name="Weight" Type="Double" Nullable="false" />
+          <Property Name="WeightUnit" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ParcelCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Material" Relationship="Model.FK_MeasurementRecord_Material" FromRole="MeasurementRecord" ToRole="Material" />
+          <NavigationProperty Name="MeasurementDetailRecords" Relationship="Model.FK_MeasurementDetailRecord_MeasurementRecord" FromRole="MeasurementRecord" ToRole="MeasurementDetailRecord" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="Model.UserInRole" FromRole="Role" ToRole="User" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Username" />
+          </Key>
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Roles" Relationship="Model.UserInRole" FromRole="User" ToRole="Role" />
+          <Property Name="Role" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_ImportedInventory_Material">
+          <End Type="Model.Material" Role="Material" Multiplicity="1" />
+          <End Type="Model.ImportedInventory" Role="ImportedInventory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ImportedInventory">
+              <PropertyRef Name="MaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Material_Material">
+          <End Type="Model.Material" Role="Material" Multiplicity="0..1" />
+          <End Type="Model.Material" Role="Material1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Material1">
+              <PropertyRef Name="PatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MeasurementDetailRecord_Material">
+          <End Type="Model.Material" Role="Material" Multiplicity="1" />
+          <End Type="Model.MeasurementDetailRecord" Role="MeasurementDetailRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MeasurementDetailRecord">
+              <PropertyRef Name="RawMaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MeasurementRecord_Material">
+          <End Type="Model.Material" Role="Material" Multiplicity="1" />
+          <End Type="Model.MeasurementRecord" Role="MeasurementRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MeasurementRecord">
+              <PropertyRef Name="ResultMaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MeasurementDetailRecord_MeasurementRecord">
+          <End Type="Model.MeasurementRecord" Role="MeasurementRecord" Multiplicity="1" />
+          <End Type="Model.MeasurementDetailRecord" Role="MeasurementDetailRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MeasurementRecord">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MeasurementDetailRecord">
+              <PropertyRef Name="MeasurementRecordID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserInRole">
+          <End Type="Model.Role" Role="Role" Multiplicity="*" />
+          <End Type="Model.User" Role="User" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Composition">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ResultMaterialID" Type="Int64" Nullable="false" />
+          <Property Name="ComponentMaterialID" Type="Int64" Nullable="false" />
+          <Property Name="Weight" Type="Double" Nullable="false" />
+          <Property Name="WeightUnit" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Material" Relationship="Model.FK_Composition_Material" FromRole="Composition" ToRole="Material" />
+          <NavigationProperty Name="Material1" Relationship="Model.FK_Composition_Material1" FromRole="Composition" ToRole="Material" />
+        </EntityType>
+        <Association Name="FK_Composition_Material">
+          <End Type="Model.Material" Role="Material" Multiplicity="1" />
+          <End Type="Model.Composition" Role="Composition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Composition">
+              <PropertyRef Name="ResultMaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Composition_Material1">
+          <End Type="Model.Material" Role="Material" Multiplicity="1" />
+          <End Type="Model.Composition" Role="Composition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Composition">
+              <PropertyRef Name="ComponentMaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="MonthReport">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaterialId" Type="Int64" Nullable="false" />
+          <Property Name="MaterialCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MaterialName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RemainQuantity" Type="Double" Nullable="false" />
+          <Property Name="ImportQuantity" Type="Double" Nullable="false" />
+          <Property Name="ExportQuantity" Type="Double" Nullable="false" />
+          <Property Name="WeightUnit" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="ReportDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ParcelCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Material" Relationship="Model.FK_MonthReport_Material" FromRole="MonthReport" ToRole="Material" />
+        </EntityType>
+        <Association Name="FK_MonthReport_Material">
+          <End Type="Model.Material" Role="Material" Multiplicity="1" />
+          <End Type="Model.MonthReport" Role="MonthReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MonthReport">
+              <PropertyRef Name="MaterialId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="MaterialMeasurementEntities">
+          <EntitySetMapping Name="ImportedInventories">
+            <EntityTypeMapping TypeName="Model.ImportedInventory">
+              <MappingFragment StoreEntitySet="ImportedInventory">
+                <ScalarProperty Name="OriginalQuantity" ColumnName="OriginalQuantity" />
+                <ScalarProperty Name="WeightUnit" ColumnName="WeightUnit" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ImportDate" ColumnName="ImportDate" />
+                <ScalarProperty Name="ParcelCode" ColumnName="ParcelCode" />
+                <ScalarProperty Name="MaterialID" ColumnName="MaterialID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Materials">
+            <EntityTypeMapping TypeName="Model.Material">
+              <MappingFragment StoreEntitySet="Material">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="PatId" ColumnName="PatId" />
+                <ScalarProperty Name="Revision" ColumnName="Revision" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MeasurementDetailRecords">
+            <EntityTypeMapping TypeName="Model.MeasurementDetailRecord">
+              <MappingFragment StoreEntitySet="MeasurementDetailRecord">
+                <ScalarProperty Name="ParcelCode" ColumnName="ParcelCode" />
+                <ScalarProperty Name="WeightUnit" ColumnName="WeightUnit" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="RawMaterialID" ColumnName="RawMaterialID" />
+                <ScalarProperty Name="MeasurementRecordID" ColumnName="MeasurementRecordID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MeasurementRecords">
+            <EntityTypeMapping TypeName="Model.MeasurementRecord">
+              <MappingFragment StoreEntitySet="MeasurementRecord">
+                <ScalarProperty Name="ParcelCode" ColumnName="ParcelCode" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="WeightUnit" ColumnName="WeightUnit" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="ResultMaterialID" ColumnName="ResultMaterialID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="Model.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Model.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="Model.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="UserInRole" TypeName="Model.UserInRole" StoreEntitySet="UserInRole">
+            <EndProperty Name="User">
+              <ScalarProperty Name="Username" ColumnName="Username" />
+            </EndProperty>
+            <EndProperty Name="Role">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="Compositions">
+            <EntityTypeMapping TypeName="Model.Composition">
+              <MappingFragment StoreEntitySet="Composition">
+                <ScalarProperty Name="WeightUnit" ColumnName="WeightUnit" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="ComponentMaterialID" ColumnName="ComponentMaterialID" />
+                <ScalarProperty Name="ResultMaterialID" ColumnName="ResultMaterialID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MonthReports">
+            <EntityTypeMapping TypeName="Model.MonthReport">
+              <MappingFragment StoreEntitySet="MonthReport">
+                <ScalarProperty Name="ParcelCode" ColumnName="ParcelCode" />
+                <ScalarProperty Name="ReportDate" ColumnName="ReportDate" />
+                <ScalarProperty Name="WeightUnit" ColumnName="WeightUnit" />
+                <ScalarProperty Name="ExportQuantity" ColumnName="ExportQuantity" />
+                <ScalarProperty Name="ImportQuantity" ColumnName="ImportQuantity" />
+                <ScalarProperty Name="RemainQuantity" ColumnName="RemainQuantity" />
+                <ScalarProperty Name="MaterialName" ColumnName="MaterialName" />
+                <ScalarProperty Name="MaterialCode" ColumnName="MaterialCode" />
+                <ScalarProperty Name="MaterialId" ColumnName="MaterialId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
